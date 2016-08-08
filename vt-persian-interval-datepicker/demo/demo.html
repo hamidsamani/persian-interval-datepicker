@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>persian interval datepicker</title>
+    <meta charset="utf-8"/>
+    <link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css"
+          rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
+    <link href="../../bower_components/bootstrap/dist/css/bootstrap-theme.min.css"
+          rel="stylesheet"/>
+
+    <link href="../assets/vtDatePicker/datepicker.css"
+          rel="stylesheet">
+
+    <script src="../../bower_components/moment/min/moment.min.js"></script>
+    <script src="../../bower_components/moment-jalaali/build/moment-jalaali.js"></script>
+    <script src="../../bower_components/angular/angular.js"></script>
+    <script src="../../bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script src="../assets/vtDatePicker/persiandate.js"></script>
+    <script src="../assets/vtDatePicker/persian-datepicker-tpls.js"></script>
+
+    <script src="../persian-interval-datepicker.js"></script>
+    <script>
+        angular.module('demo', ['ui.bootstrap.persian.interval.datepicker']);
+    </script>
+</head>
+<body ng-app="demo">
+<div class="container">
+    <hr/>
+    <div class="row">
+        <persian-interval-datepicker display="inline"
+                                     start-date-label="از تاریخ"
+                                     end-date-label="تا تاریخ"
+                                     ng-model="dateInterval"
+                                     start-date-label="از تاریخ"
+                                     format="yyyy/MM/dd"></persian-interval-datepicker>
+
+        <pre><b>ModelValue:</b>{{dateInterval}}</pre>
+        <pre><b>Errors:</b>{{dateInterval.$error}}</pre>
+
+    </div>
+    <div class="row">
+        <persian-interval-datepicker display="multiline"
+                                     start-date-label="از تاریخ"
+                                     end-date-label="تا تاریخ"
+                                     ng-model="dateInterval"
+                                     start-date-label="از تاریخ"
+                                     format="yyyy/MM/dd"></persian-interval-datepicker>
+
+        <pre><b>ModelValue:</b>{{dateInterval}}</pre>
+        <pre><b>Errors:</b>{{dateInterval.$error}}</pre>
+    </div>
+</div>
+</body>
+
+</html>
