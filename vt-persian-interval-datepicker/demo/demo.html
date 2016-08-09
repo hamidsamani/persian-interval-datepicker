@@ -23,51 +23,155 @@
     <script src="../persian-interval-datepicker.js"></script>
     <script>
         angular.module('demo', ['ui.bootstrap.persian.interval.datepicker']).controller('SampleCtrl', function ($scope) {
-            $scope.$watch('dateInterval', function (newValue, oldValue) {
-                $scope.isFormValid = $scope.form.$valid;
-                $scope.formErrors = $scope.form.$error;
+            $scope.$watch('dateInterval', function () {
+                $scope.errors = $scope.form.interval;
             });
         });
     </script>
 </head>
 <body ng-app="demo">
 <div class="container">
-    <hr/>
-    <form name="form">
-        <div class="row"
-             ng-controller="SampleCtrl">
-            <persian-interval-datepicker display="inline"
-                                         start-date-model="start"
-                                         start-date-label="Start Date"
-                                         end-date-label="End Date"
-                                         range-max="10"
-                                         range-min="5"
-                                         required
-                                         ng-model="dateInterval"
-                                         format="yyyy/MM/dd">
+    <div class="page-header">
+        <h1>Persian Interval DatePicker
+            <small>(ui.bootstrap.persian.interval.datepicker)</small>
+        </h1>
+    </div>
+    <div class="row"
+         ng-controller="SampleCtrl">
+        <div class="col-md-6 show-grid">
+            <div>
+                <form name="form">
+                    <persian-interval-datepicker name="interval"
+                                                 display="inline"
+                                                 start-date-model="StartDate"
+                                                 start-date-placeholder="Start Date"
+                                                 end-date-placeholder="End Date"
+                                                 range-max="10"
+                                                 range-min="5"
+                                                 required
+                                                 ng-model="interval"
+                                                 format="yyyy/MM/dd">
 
-            </persian-interval-datepicker>
+                    </persian-interval-datepicker>
 
-            <pre><b>ModelValue:</b> {{dateInterval}}</pre>
-            <pre><b>isFormValid:</b>{{isFormValid}}</pre>
-            <pre><b>Errors:</b>{{formErrors | json}}</pre>
-
+                    <pre><b>ModelValue:</b> {{interval}}</pre>
+                    <pre><b>Errors:</b>{{errors.$error | json}}</pre>
+                </form>
+            </div>
+            <div>
+                <h3>Inline Datepicker </h3>
+                <pre>
+&ltpersian-interval-datepicker name="interval"
+          display="inline"
+          start-date-model="StartDate"
+          start-date-placeholder="Start Date"
+          end-date-placeholder="End Date"
+          range-max="10"
+          range-min="5"
+          required
+          ng-model="dateInterval"
+          format="yyyy/MM/dd"&gt
+&lt/persian-interval-datepicker&gt
+            </pre>
+            </div>
+            <div>
+                <persian-interval-datepicker
+                        name="interval"
+                        display="multiline"
+                        start-date-label="Start Date:"
+                        end-date-label="End Date"
+                        ng-model="multilineInterval"
+                        format="yyyy/MM/dd"></persian-interval-datepicker>
+            </div>
+            <div>
+                <h3>Multiline Datepicker</h3>
+                <pre>
+&ltpersian-interval-datepicker
+       display="multiline"
+       start-date-label="Start Date:"
+       end-date-label="End Date"
+       ng-model="multilineInterval"
+       format="yyyy/MM/dd"&gt
+&lt/persian-interval-datepicker&gt
+                </pre>
+            </div>
         </div>
-    </form>
-    <hr/>
-    <div class="row">
-        <persian-interval-datepicker display="multiline"
-                                     start-date-label="Start Date:"
-                                     start-date-placeholder="Start Date"
-                                     end-date-placeholder="End Date"
-                                     end-date-label="End Date"
-                                     ng-model="multilineInterval"
-                                     format="yyyy/MM/dd"></persian-interval-datepicker>
-
-        <pre><b>ModelValue:</b>{{multilineInterval}}</pre>
-        <pre><b>Errors:</b>{{multilineInterval.$errors}}</pre>
+        <div class="col-md-6">
+            <p>Persian interval Datepicker based on
+                <a href="http://aminrahimi.github.io/angular-bootstrap-persian-datepicker/">Amin Rahimi's</a> Persian
+               Datepicker
+            </p>
+            <h3>persian-interval-datepicker attributes</h3>
+            <ul>
+                <li>
+                    <p>
+                        <code>display</code> <i class="glyphicon glyphicon-eye-open"></i>
+                        <em>(Defaults: inline)</em> : could be <em>inline</em> or <em>multiline</em> for displaying
+                                                    Datepickers
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>format</code> <i class="glyphicon glyphicon-eye-open"></i>
+                        <em>(Defaults: yyyy/MM/dd)</em> format of displaying date in Datepickers
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>start-date-model</code>
+                        <em>(Defaults: startDate)</em> name of the startdate of interval, <em>ng-model</em> of
+                                                       datapicker consist of combination of startDate and endDate
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>end-date-model</code>
+                        <em>(Defaults: endDate)</em> name of the enddate of interval, <em>ng-model</em> of
+                                                     datapicker consist of combination of startDate and endDate
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>start-date-label</code>
+                        if defined, label with this attribute value will be placed before startDate Datepicker
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>end-date-label</code>
+                        if defined, label with this attribute value will be placed before endDate Datepicker
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>start-date-placeholder</code>
+                        if defined, placeholder attribute of startDate Datepicker will be set with this value
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>end-date-placeholder</code>
+                        if defined, placeholder attribute of endDate Datepicker will be set with this value
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>range-min</code>
+                        <code>(Defaults:1)</code>
+                        minimum of ranges between Datepickers dates.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>range-max</code>
+                        maximum of ranges between Datepickers dates
+                    </p>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
+
 </body>
 
 </html>
