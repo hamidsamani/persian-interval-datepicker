@@ -18,12 +18,12 @@ angular.module('ui.bootstrap.persian.interval.datepicker'
 
     })
     .controller('persianIntervalDatepickerCtrl', function ($scope, $element, $attrs, $interpolate, persianIntervalService, persianIntervalDatepickerOptions) {
-        var rangeMin = angular.isDefined($scope.rangeMin) ? $scope.rangeMin : 1
-            , rangeMax = angular.isDefined($scope.rangeMax) ? $scope.rangeMax : angular.noop()
-            , startDateModel = angular.isDefined($scope.startDateModel) ? $scope.startDateModel : persianIntervalDatepickerOptions.startDateModel
-            , endDateModel = angular.isDefined($scope.endDateModel) ? $scope.endDateModel : persianIntervalDatepickerOptions.endDateModel;
-
+        var rangeMin = angular.isDefined($attrs['rangeMin']) ? $attrs['rangeMin'] : 1
+            , rangeMax = angular.isDefined($attrs['rangeMax']) ? $attrs['rangeMax'] : angular.noop()
+            , startDateModel = angular.isDefined($attrs['startDateModel']) ? $attrs['startDateModel'] : persianIntervalDatepickerOptions.startDateModel
+            , endDateModel = angular.isDefined($attrs['endDateModel']) ? $attrs['endDateModel'] : persianIntervalDatepickerOptions.endDateModel;
         this.init = function (ngModel) {
+            console.log($scope);
             angular.forEach(['startDate', 'endDate'], function (value) {
                 $scope.$watch(value, function () {
                     if (angular.isDefined($scope.startDate) && angular.isDefined($scope.endDate)) {
@@ -51,12 +51,9 @@ angular.module('ui.bootstrap.persian.interval.datepicker'
         return {
             restrict: 'AE',
             replace: true,
+            controller: 'persianIntervalDatepickerCtrl',
             templateUrl: 'template/persianIntervalDatePicker.html',
             scope: {
-                startDateModel: '@',
-                endDateModel: '@',
-                rangeMax: '@',
-                rangeMin: '@',
                 display: '@',
                 format: '@',
                 startDateLabel: '@',
@@ -70,9 +67,9 @@ angular.module('ui.bootstrap.persian.interval.datepicker'
         return {
             restrict: 'AE',
             replace: true,
-            controller: 'persianIntervalDatepickerCtrl',
+            scope: false,
             templateUrl: 'template/inlineIntervalDatePicker.html',
-            require: ['persianInlineIntervalDatepicker', '^ngModel'],
+            require: ['^persianIntervalDatepicker', '^ngModel'],
             link: function (scope, element, attr, ctrls) {
                 var ctrl = ctrls[0], ngModel = ctrls[1];
                 ctrl.init(ngModel);
