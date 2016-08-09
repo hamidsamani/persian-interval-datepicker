@@ -5,8 +5,8 @@
     <meta charset="utf-8"/>
     <link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css"
           rel="stylesheet"/>
-    <link rel="stylesheet"
-          href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
+    <!--<link rel="stylesheet"-->
+    <!--href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">-->
     <link href="../../bower_components/bootstrap/dist/css/bootstrap-theme.min.css"
           rel="stylesheet"/>
 
@@ -22,34 +22,51 @@
 
     <script src="../persian-interval-datepicker.js"></script>
     <script>
-        angular.module('demo', ['ui.bootstrap.persian.interval.datepicker']);
+        angular.module('demo', ['ui.bootstrap.persian.interval.datepicker']).controller('SampleCtrl', function ($scope) {
+            $scope.$watch('dateInterval', function (newValue, oldValue) {
+                console.log($scope.form.$error);
+                $scope.isFormValid = $scope.form.$valid;
+                $scope.formErrors = $scope.form.$error;
+            });
+        });
     </script>
 </head>
 <body ng-app="demo">
 <div class="container">
     <hr/>
-    <div class="row">
-        <persian-interval-datepicker display="inline"
-                                     start-date-label="از تاریخ"
-                                     end-date-label="تا تاریخ"
-                                     ng-model="dateInterval"
-                                     start-date-label="از تاریخ"
-                                     format="yyyy/MM/dd"></persian-interval-datepicker>
+    <form name="form">
+        <div class="row"
+             ng-controller="SampleCtrl">
+            <persian-interval-datepicker display="inline"
+                                         start-day-model="start"
+                                         start-date-label="Start Date:"
+                                         start-date-placeholder="Start Date"
+                                         end-date-placeholder="End Date"
+                                         range-max="10"
+                                         range-min="5"
+                                         required
+                                         ng-model="dateInterval"
+                                         end-date-label="End Date"
+                                         start-date-label="از تاریخ"
+                                         format="yyyy/MM/dd"></persian-interval-datepicker>
 
-        <pre><b>ModelValue:</b>{{dateInterval}}</pre>
-        <pre><b>Errors:</b>{{dateInterval.$error}}</pre>
+            <pre><b>ModelValue:</b> Start Date: {{dateInterval.startDate}} End Date: {{dateInterval.endDate}}</pre>
+            <pre><b>isFormValid:</b>{{isFormValid}}</pre>
+            <pre><b>Errors:</b>{{formErrors | json}}</pre>
 
-    </div>
+        </div>
+    </form>
     <div class="row">
         <persian-interval-datepicker display="multiline"
-                                     start-date-label="از تاریخ"
-                                     end-date-label="تا تاریخ"
-                                     ng-model="dateInterval"
-                                     start-date-label="از تاریخ"
+                                     start-date-label="Start Date:"
+                                     start-date-placeholder="Start Date"
+                                     end-date-placeholder="End Date"
+                                     end-date-label="End Date"
+                                     ng-model="multilineInterval"
                                      format="yyyy/MM/dd"></persian-interval-datepicker>
 
-        <pre><b>ModelValue:</b>{{dateInterval}}</pre>
-        <pre><b>Errors:</b>{{dateInterval.$error}}</pre>
+        <pre><b>ModelValue:</b>{{multilineInterval}}</pre>
+        <pre><b>Errors:</b>{{multilineInterval.$errors}}</pre>
     </div>
 </div>
 </body>
