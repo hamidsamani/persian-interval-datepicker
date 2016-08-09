@@ -68,6 +68,10 @@ angular.module('ui.bootstrap.persian.interval.datepicker'
                 endDateLabel: '@',
                 startDatePlaceholder: '@',
                 endDatePlaceholder: '@'
+            },
+            compile: function (element, attrs) {
+                if (attrs.display == undefined) attrs.display = 'inline';
+
             }
         }
     })
