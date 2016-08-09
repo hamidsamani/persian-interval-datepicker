@@ -24,7 +24,6 @@
     <script>
         angular.module('demo', ['ui.bootstrap.persian.interval.datepicker']).controller('SampleCtrl', function ($scope) {
             $scope.$watch('dateInterval', function (newValue, oldValue) {
-                console.log($scope.form.$error);
                 $scope.isFormValid = $scope.form.$valid;
                 $scope.formErrors = $scope.form.$error;
             });
@@ -38,35 +37,36 @@
         <div class="row"
              ng-controller="SampleCtrl">
             <persian-interval-datepicker display="inline"
-                                         start-day-model="start"
-                                         start-date-label="Start Date:"
-                                         start-date-placeholder="Start Date"
-                                         end-date-placeholder="End Date"
+                                         start-date-model="start"
+                                         start-date-label="Start Date"
+                                         end-date-label="End Date"
                                          range-max="10"
                                          range-min="5"
+                                         required
                                          ng-model="dateInterval"
-                                         end-date-label="End Date"
-                                         start-date-label="از تاریخ"
-                                         format="yyyy/MM/dd"></persian-interval-datepicker>
+                                         format="yyyy/MM/dd">
 
-            <pre><b>ModelValue:</b> Start Date: {{dateInterval.startDate}} End Date: {{dateInterval.endDate}}</pre>
+            </persian-interval-datepicker>
+
+            <pre><b>ModelValue:</b> {{dateInterval}}</pre>
             <pre><b>isFormValid:</b>{{isFormValid}}</pre>
             <pre><b>Errors:</b>{{formErrors | json}}</pre>
 
         </div>
     </form>
-    <!--<div class="row">-->
-    <!--<persian-interval-datepicker display="multiline"-->
-    <!--start-date-label="Start Date:"-->
-    <!--start-date-placeholder="Start Date"-->
-    <!--end-date-placeholder="End Date"-->
-    <!--end-date-label="End Date"-->
-    <!--ng-model="multilineInterval"-->
-    <!--format="yyyy/MM/dd"></persian-interval-datepicker>-->
+    <hr/>
+    <div class="row">
+        <persian-interval-datepicker display="multiline"
+                                     start-date-label="Start Date:"
+                                     start-date-placeholder="Start Date"
+                                     end-date-placeholder="End Date"
+                                     end-date-label="End Date"
+                                     ng-model="multilineInterval"
+                                     format="yyyy/MM/dd"></persian-interval-datepicker>
 
-    <!--<pre><b>ModelValue:</b>{{multilineInterval}}</pre>-->
-    <!--<pre><b>Errors:</b>{{multilineInterval.$errors}}</pre>-->
-    <!--</div>-->
+        <pre><b>ModelValue:</b>{{multilineInterval}}</pre>
+        <pre><b>Errors:</b>{{multilineInterval.$errors}}</pre>
+    </div>
 </div>
 </body>
 

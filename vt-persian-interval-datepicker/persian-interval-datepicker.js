@@ -17,26 +17,29 @@ angular.module('ui.bootstrap.persian.interval.datepicker'
         }
 
     })
-    .controller('persianIntervalDatepickerCtrl', function ($scope, $element, $attrs, $interpolate, persianIntervalService, persianIntervalDatepickerOptions) {
+    .controller('persianIntervalDatepickerCtrl', function ($scope, $element, $rootScope, $attrs, $interpolate, persianIntervalService, persianIntervalDatepickerOptions) {
         var rangeMin = angular.isDefined($attrs['rangeMin']) ? $attrs['rangeMin'] : 1
             , rangeMax = angular.isDefined($attrs['rangeMax']) ? $attrs['rangeMax'] : angular.noop()
             , startDateModel = angular.isDefined($attrs['startDateModel']) ? $attrs['startDateModel'] : persianIntervalDatepickerOptions.startDateModel
             , endDateModel = angular.isDefined($attrs['endDateModel']) ? $attrs['endDateModel'] : persianIntervalDatepickerOptions.endDateModel;
-        this.init = function (ngModel) {
-            console.log($scope);
-            angular.forEach(['startDate', 'endDate'], function (value) {
-                $scope.$watch(value, function () {
-                    if (angular.isDefined($scope.startDate) && angular.isDefined($scope.endDate)) {
-                        ngModel.$setValidity('startDateGreaterThanEnd', ($scope.startDate < $scope.endDate));
 
-                        var diff = persianIntervalService.diffDates($scope.startDate, $scope.endDate);
+
+        this.init = function (ngModel, scope) {
+            angular.forEach(['startDate', 'endDate'], function (value) {
+                scope.$watch(value, function () {
+                    if (angular.isDefined(scope.startDate) && angular.isDefined(scope.endDate)) {
+                        ngModel.$setValidity('startDateGreaterThanEnd', (scope.startDate < scope.endDate));
+
+                        var diff = persianIntervalService.diffDates(scope.startDate, scope.endDate);
+
                         ngModel.$setValidity('rangeDatesInvalid', !(diff > rangeMax || diff < rangeMin));
+                        ngModel.$setValidity('required', (scope.startDate && scope.endDate))
 
                         if (angular.equals({}, ngModel.$error)) {
                             $element.removeClass('has-error');
                             var interval = {};
-                            interval[startDateModel] = $scope.startDate;
-                            interval[endDateModel] = $scope.endDate;
+                            interval[startDateModel] = scope.startDate;
+                            interval[endDateModel] = scope.endDate;
                             ngModel.$setViewValue(interval);
                         } else {
                             $element.addClass('has-error');
@@ -44,7 +47,12 @@ angular.module('ui.bootstrap.persian.interval.datepicker'
                         }
                     }
                 });
-            })
+            });
+            scope.toggleMode = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                scope[event.target.name] = !scope[event.target.name];
+            };
         }
     })
     .directive('persianIntervalDatepicker', function () {
@@ -66,13 +74,11 @@ angular.module('ui.bootstrap.persian.interval.datepicker'
     .directive('persianInlineIntervalDatepicker', function () {
         return {
             restrict: 'AE',
-            replace: true,
-            scope: false,
             templateUrl: 'template/inlineIntervalDatePicker.html',
             require: ['^persianIntervalDatepicker', '^ngModel'],
             link: function (scope, element, attr, ctrls) {
                 var ctrl = ctrls[0], ngModel = ctrls[1];
-                ctrl.init(ngModel);
+                ctrl.init(ngModel, scope);
             }
         }
     })
@@ -81,10 +87,10 @@ angular.module('ui.bootstrap.persian.interval.datepicker'
             restrict: 'AE',
             controller: 'persianIntervalDatepickerCtrl',
             templateUrl: 'template/multiLineIntervalDatePicker.html',
-            require: ['persianMultilineIntervalDatepicker', '^ngModel'],
+            require: ['^persianIntervalDatepicker', '^ngModel'],
             link: function (scope, element, attr, ctrls) {
                 var ctrl = ctrls[0], ngModel = ctrls[1];
-                ctrl.init(ngModel);
+                ctrl.init(ngModel, scope);
             }
         }
     });
@@ -100,14 +106,14 @@ angular.module('template/multiLineIntervalDatePicker.html', []).run(["$templateC
         "<input name=\"startDate\" placeholder=\"{{startDatePlaceholder}}\" class=\"form-control\" " +
         "type=\"text\" datepicker-popup-persian=\"{{format}}\" ng-model=\"startDate\" show-button-bar=\"false\" " +
         "is-open=\"startDateOpen\" ng-click=\"startDateOpen = true\"/><span class=\"input-group-btn\">" +
-        "<button type=\"button\" class=\"btn btn-default\" ng-click=\"startDateOpen = true\">" +
+        "<button name=\"startDateOpen\" type=\"button\" class=\"btn btn-default\" ng-click=\"toggleMode($event)\">" +
         "<i class=\"glyphicon glyphicon-calendar\"></i></button></span></p>" +
         "<label for=\"endDate\" ng-if=\"endDateLabel\">{{endDateLabel}}</label><p class=\"input-group\"><input name=\"endDate\" " +
         "placeholder=\"{{endDatePlaceholder}}\" class=\"form-control\" type=\"text\" " +
         "datepicker-popup-persian=\"{{format}}\" required ng-model=\"endDate\" show-button-bar=\"false\" " +
         "is-open=\"endDateOpen\" ng-click=\"endDateOpen = true\"/> <span class=\"input-group-btn\">" +
-        "<button type=\"button\" class=\"btn btn-default\"" +
-        "ng-click=\"endDate = true\"> <i class=\"glyphicon glyphicon-calendar\"></i>" +
+        "<button name=\"endDateOpen\" type=\"button\" class=\"btn btn-default\"" +
+        "ng-click=\"toggleMode($event)\"> <i class=\"glyphicon glyphicon-calendar\"></i>" +
         "</button></span></p></div>");
 }]);
 angular.module('template/inlineIntervalDatePicker.html', [])
@@ -117,14 +123,14 @@ angular.module('template/inlineIntervalDatePicker.html', [])
             "<p class=\"input-group\"><input name=\"startDate\" placeholder=\"{{startDatePlaceholder}}\" " +
             "class=\"form-control\" type=\"text\" datepicker-popup-persian=\"{{format}}\" " +
             "ng-model=\"startDate\" show-button-bar=\"false\" is-open=\"startDateOpen\" ng-click=\"startDateOpen = true\"/>" +
-            "<span class=\"input-group-btn\"> <button type=\"button\" class=\"btn btn-default\"" +
-            "ng-click=\"startDateOpen = true\"> <i class=\"glyphicon glyphicon-calendar\"></i>" +
+            "<span class=\"input-group-btn\"> <button name=\"startDateOpen\" type=\"button\" class=\"btn btn-default\"" +
+            "ng-click=\"toggleMode($event)\"> <i class=\"glyphicon glyphicon-calendar\"></i>" +
             "</button></span></p> <label style=\"padding:0 5px\" ng-if=\"endDateLabel\">{{endDateLabel}}</label>" +
             "<p class=\"input-group\"><input name=\"EndDate\" placeholder=\"{{endDatePlaceholder}}\" " +
             "class=\"form-control\" type=\"text\" " +
             "datepicker-popup-persian=\"{{format}}\" ng-model=\"endDate\" show-button-bar=\"false\" is-open=\"endDateOpen\" " +
             "ng-click=\"endDateOpen = true\"/> <span class=\"input-group-btn\">" +
-            "<button type=\"button\" class=\"btn btn-default\" ng-click=\"endDate = true\">" +
+            "<button name=\"endDateOpen\" type=\"button\" class=\"btn btn-default\" ng-click=\"toggleMode($event)\">" +
             "<i class=\"glyphicon glyphicon-calendar\"></i> </button></span></p></div>"
         )
     }]);
